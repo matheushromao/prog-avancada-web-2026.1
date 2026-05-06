@@ -1,10 +1,15 @@
 package com.aula.apibiblioteca.service;
 
+import com.aula.apibiblioteca.dto.UsuarioResponseDto;
+import com.aula.apibiblioteca.dto.UsuarioResquestDto;
+import com.aula.apibiblioteca.mapper.UsuarioMapper;
 import com.aula.apibiblioteca.model.Usuario;
 import com.aula.apibiblioteca.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -13,27 +18,31 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public List<Usuario> findAll() {
-        return usuarioRepository.findAll();
+    public List<UsuarioResponseDto> findAll() {
+
+        return usuarioRepository.findAll().stream().map((u) -> UsuarioMapper.ToDto(u)).toList();
     }
 
 
-    public Usuario findbyId(Long id) {
-        return usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+    public UsuarioResponseDto findbyId(Long id) {
+        var usuario = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+        return UsuarioMapper.ToDto(usuario);
+
     }
 
 
-    public Usuario save(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+    public UsuarioResponseDto save(UsuarioResquestDto usuarioresquestdto) {
+        var usuario = UsuarioMapper.ToEntity(usuarioresquestdto);
+        return UsuarioMapper.ToDto(usuarioRepository.save(usuario));
     }
 
     // Update *
-    public Usuario update(Long id, Usuario usuario) {
+    public UsuarioResponseDto update(Long id, UsuarioResquestDto usuarioresquestdto) {
         Usuario usuarioTemp = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
-        usuarioTemp.setNome(usuario.getNome());
-        usuarioTemp.setEmail(usuario.getEmail());
+        usuarioTemp.setNome(usuarioresquestdto.nome());
+        usuarioTemp.setEmail(usuarioresquestdto.email());
 
-        return usuarioRepository.save(usuarioTemp);
+        return UsuarioMapper.ToDto(usuarioRepository.save(usuarioTemp));
     }
 
     // Delete com where
