@@ -1,5 +1,6 @@
 package com.aula.apibiblioteca.service;
 
+import com.aula.apibiblioteca.dto.UsuarioEmailResquestDto;
 import com.aula.apibiblioteca.dto.UsuarioResponseDto;
 import com.aula.apibiblioteca.dto.UsuarioResquestDto;
 import com.aula.apibiblioteca.mapper.UsuarioMapper;
@@ -52,10 +53,9 @@ public class UsuarioService {
     }
 
     // Update do email
-    public Usuario updateEmail(Long id, String email) {
+    public UsuarioResponseDto updateEmail(Long id, UsuarioEmailResquestDto emailDto) {
         Usuario usuarioTemp = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
-        usuarioTemp.setEmail(email);
-
-        return usuarioRepository.save(usuarioTemp);
+        usuarioTemp.setEmail(emailDto.email());
+        return UsuarioMapper.ToDto(usuarioRepository.save(usuarioTemp));
     }
 }
