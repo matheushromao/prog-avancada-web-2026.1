@@ -4,6 +4,7 @@ import com.aula.apibiblioteca.dto.ExceptionResponseDto;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -20,6 +21,19 @@ public class GlobalHandleException {
         errors.put("mensagem", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponseDto(
                 "404",
+                errors,
+                LocalDateTime.now()
+        ));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ExceptionResponseDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getBindingResult().getFieldErrors().forEach((e) -> {
+            errors.put(e.getField(), e.getDefaultMessage());
+        });
+        return ResponseEntity.badRequest().body(new ExceptionResponseDto("400",
                 errors,
                 LocalDateTime.now()
         ));

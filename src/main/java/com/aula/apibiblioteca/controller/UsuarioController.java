@@ -37,12 +37,8 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseDto> findById(@PathVariable Long id) {
-        try {
             UsuarioResponseDto usuarioResponseDto = usuarioService.findbyId(id);
             return ResponseEntity.ok(usuarioResponseDto);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     @PostMapping
@@ -62,31 +58,19 @@ public class UsuarioController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioResponseDto> update(@PathVariable Long id, @RequestBody @Valid UsuarioResquestDto usuarioResquestDto) {
-        try{
             UsuarioResponseDto usuarioResponseDto = usuarioService.update(id, usuarioResquestDto);
             return ResponseEntity.ok(usuarioResponseDto);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
-        try {
             usuarioService.deleteById(id);
             return ResponseEntity.noContent().build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     @PatchMapping("/{id}/update-email")
     public ResponseEntity<UsuarioResponseDto> updateEmail(@PathVariable Long id, @RequestBody @Valid UsuarioEmailResquestDto emailDto) {
-        try {
             UsuarioResponseDto usuarioResponseDto = usuarioService.updateEmail(id, emailDto);
             return ResponseEntity.ok(usuarioResponseDto);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 }
