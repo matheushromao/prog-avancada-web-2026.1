@@ -8,6 +8,10 @@ import com.aula.apibiblioteca.service.UsuarioService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +29,10 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping
-    public ResponseEntity<List<UsuarioResponseDto>> findAll() {
-        return ResponseEntity.ok(usuarioService.findAll());
+    public ResponseEntity<Page<UsuarioResponseDto>> findAll(
+            @PageableDefault(size = 10, sort = "nome", direction = Sort.Direction.ASC)
+            Pageable pagination) {
+        return ResponseEntity.ok(usuarioService.findAll(pagination));
     }
 
     @GetMapping("/{id}")
