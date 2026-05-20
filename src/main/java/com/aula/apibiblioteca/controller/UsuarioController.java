@@ -49,7 +49,7 @@ public class UsuarioController {
             for (var error : result.getFieldErrors()) {
                 erros.put(error.getField(), error.getDefaultMessage());
             }
-            ResponseEntity.badRequest().body(erros);
+            return ResponseEntity.badRequest().body(erros);
         }
 
         var UserCreate = usuarioService.save(usuarioResquestDto);
