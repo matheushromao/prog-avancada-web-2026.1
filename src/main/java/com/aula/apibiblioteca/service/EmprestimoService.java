@@ -32,6 +32,8 @@ public class EmprestimoService {
         var livro = livroRepository.findById(emprestimoRequestDto.livroId())
                 .orElseThrow(()-> new EntityNotFoundException("Livro não encontrado"));
 
+        // verificar quantidades de livros
+        // salvar quantidades atualizada do livro emprestado
         var emprestimo = new Emprestimo();
         emprestimo.setUsuario(usuario);
         emprestimo.setLivro(livro);
